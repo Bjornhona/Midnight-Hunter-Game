@@ -1,0 +1,32 @@
+body {
+  background-color: lightblue;
+}
+
+/* ---- fonts ---- */
+h1 {
+  color: blue;
+  font-size: 36px;
+}
+
+/* ---- button ---- */
+
+button.start-button {
+  background-color: pink;
+  padding: 20px 40px;
+  border-radius: 25px;
+  border: 2px solid fuchsia;
+  color: fuchsia;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ---- start section ---- */
+
+section.start-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
