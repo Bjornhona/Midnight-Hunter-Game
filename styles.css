@@ -2,15 +2,24 @@ body {
   background-color: lightblue;
 }
 
+.hidden {
+  display: none;
+}
+
 /* ---- fonts ---- */
 h1 {
   color: blue;
   font-size: 36px;
 }
 
+h2 {
+  color: blue;
+  font-size: 28px;
+}
+
 /* ---- button ---- */
 
-button.start-button {
+button.button {
   background-color: pink;
   padding: 20px 40px;
   border-radius: 25px;
@@ -19,6 +28,22 @@ button.start-button {
   font-size: 18px;
   font-weight: 800;
   text-transform: uppercase;
+  margin: 10px;
+}
+
+button.esc {
+  background-color: pink;
+  padding: 10px;
+  border: 2px solid fuchsia;
+  color: fuchsia;
+  font-size: 28px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+div.button-esc {
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* ---- start section ---- */
