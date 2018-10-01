@@ -26,6 +26,7 @@ body {
 h1 {
   color: blue;
   font-size: 36px;
+  margin-top: 0;
 }
 
 h2 {
@@ -73,16 +74,41 @@ div.button-esc {
 
 /* ---- start section ---- */
 
+main.start-main {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  border: 10px solid fuchsia;
+}
+
 section.start-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 500px;
 }
 img.start-heart {
-  width: 150px;
-  margin: 20px;
+  width: 200px;
+  margin-top: 20px;
+}
+
+/* ---- rules ---- */
+
+main.rules-screen {
+  display: flex;
+  justify-content: center;
+  border: 10px solid fuchsia;
+}
+
+img.image-border {
+  border: 5px solid fuchsia;
+  margin: 0 5px;
+}
+
+div.description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* ---- canvas ---- */
@@ -97,6 +123,10 @@ img.start-heart {
 }
 
 /* ---- game ---- */
+
+main.game {
+  border: 10px solid fuchsia;
+}
 
 header.game-header {
   display: flex;
@@ -121,5 +151,43 @@ div.lives-images {
 
 div.game-over {
   display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  border: 10px solid fuchsia;
+}
+
+div.inner-container {
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+}
+
+img.image-game-over {
+  width: 150px;
+  margin-top: 40px;
+}
+
+/* ---- You Win ---- */
+
+main.you-win-screen {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  border: 10px solid fuchsia;
+}
+
+div.you-win {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+img.love-doves {
+  width: 250px;
+  margin-top: 40px;
 }

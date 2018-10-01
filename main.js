@@ -25,7 +25,7 @@ function main() {
     destroyRulesScreen();
 
     splashMain = buildDom(`
-      <main class="container">
+      <main class="start-main">
         <section class="start-section">
           <h1>Midnight Hunter</h1>
           <button class="start-button button">Start game</button>
@@ -52,8 +52,8 @@ function main() {
     destroySplash();
 
     rulesMain = buildDom(`
-      <main class="rules-screen container">
-        <div class="description">
+      <main class="rules-screen">
+        <div class="description container">
           <div class="button-esc">
             <button class="esc">x</button>
           </div>
@@ -65,19 +65,13 @@ function main() {
             <p>Move around with the <strong>UP</strong>, <strong>DOWN</strong>, <strong>RIGHT</strong> and <strong>LEFT</strong> keys.</p>
             <p>And remember, love don't come easy!!!</p> 
           </div>
-          <aside class="key-images">
-            <img src="/up-key.png"/>
-            <img src="/right-key.png"/>
-            <img src="/left-key.png"/>
-            <img src="/down-key.png"/>
-          </aside>
           <div class="images">
             <div class="enemies">
               <h2>Meet your worst enemies</h2>
               <div class"ex-images">
-                <img src="/images/angry-ex.jpg">
-                <img src="./images/scary-ex.jpg">
-                <img src="./images/desperate-ex.jpg">
+                <img class="image-border" src="./images/angry-ex.jpg">
+                <img class="image-border" src="./images/scary-ex.jpg">
+                <img class="image-border" src="./images/desperate-ex.jpg">
               </div>
             </div>
           </div>
@@ -110,11 +104,12 @@ function main() {
     destroySplash();
     
     game = new Game();
-    if (game.gameIsOver) {
-      game.onOver(buildGameOver);
-    } else if (game.youWonGame) {
-      game.onOver(buildYouWin);
-    }
+    // if (game.gameIsOver) {
+    //   game.onOver(buildGameOver);
+    // } else if (game.youWonGame) {
+    //   game.onOver(buildYouWin);
+    // }
+    game.onOver(buildGameOver);
     game.start();
     
   }
@@ -129,11 +124,15 @@ function main() {
     destroyGame();
 
     gameOverMain = buildDom(`
-      <main>
-        <div class="game-over container">
-          <h1>Game over</h1>
-          <p>Oh noooo, love don't come easy! I told you to stay away from toxic people or they can ruin your life. Better luck next time.</p>
-          <button class="restart-button button">Play Again</button>
+      <main class="game-over-screen">
+        <div class="game-over">
+          <div class="inner-container">
+            <h1>Game over</h1>
+            <p>Oh noooo, toxic people can ruin your life.</p>
+            <p>Better luck next time!</p>
+            <button class="restart-button button">Play Again</button>
+            <img class="image-game-over" src="./images/toxic-gas-mask-clipart-at-picture-26.png"/>
+          </div>
         </div>
       </main>
     `);
@@ -155,11 +154,13 @@ function main() {
     destroyGame();
 
     youWinMain = buildDom(`
-      <main>
-        <div class="you-win container">
+      <main class="you-win-screen">
+        <div class="you-win">
           <h1>You win</h1>
-          <p>Congratulations! You found true love at midnight. Make it last.</p>
+          <p>Congratulations! You found true love at midnight.</p>
+          <p>Make it last!</p>
           <button class="restart-button button">Play Again</button>
+          <img class="love-doves" src="./images/png-love.png"/>
         </div>
       </main>
     `);
