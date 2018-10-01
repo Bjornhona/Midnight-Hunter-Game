@@ -1,12 +1,28 @@
+/* ---- reset ---- */
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
+  margin: 0;
+  padding: 0;
   background-color: lightblue;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.container {
+  margin: 30px;
 }
 
 .hidden {
   display: none;
 }
 
-/* ---- fonts ---- */
+/* ---- typography ---- */
 h1 {
   color: blue;
   font-size: 36px;
@@ -15,6 +31,14 @@ h1 {
 h2 {
   color: blue;
   font-size: 28px;
+}
+
+h3 {
+  padding-right: 30px;
+  color: blue;
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
 }
 
 /* ---- button ---- */
@@ -29,16 +53,17 @@ button.button {
   font-weight: 800;
   text-transform: uppercase;
   margin: 10px;
+  width: 250px;
 }
 
 button.esc {
   background-color: pink;
-  padding: 10px;
+  padding: 7px 10px;
   border: 2px solid fuchsia;
   color: fuchsia;
-  font-size: 28px;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase
 }
 
 div.button-esc {
@@ -54,4 +79,47 @@ section.start-section {
   justify-content: center;
   align-items: center;
   height: 500px;
+}
+img.start-heart {
+  width: 150px;
+  margin: 20px;
+}
+
+/* ---- canvas ---- */
+
+.game {
+  height: 100vh;
+  position: relative;
+}
+
+.canvas {
+  height: calc(100% - 100px);
+}
+
+/* ---- game ---- */
+
+header.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  background-color: lightpink;
+  border: 2px solid fuchsia;
+  padding: 10px 20px;
+}
+
+div.lives {
+  display: flex;
+  align-items: center;
+}
+
+div.lives-images {
+  color: fuchsia;
+}
+
+/* ---- Game Over ---- */
+
+div.game-over {
+  display: flex;
+  flex-direction: column;
 }

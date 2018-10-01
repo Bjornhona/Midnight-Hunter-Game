@@ -13,19 +13,15 @@ function main() {
   var splashMain;
   var rulesMain;
   var gameOverMain;
-  var highScoreMain;
-  var usernameInputElement;
-  var usernameValue;
-  var characterScreen;
-  
+  var youWinMain;
 
   var game;
   
   /* ---- Splash ---- */
 
   function buildSplash() {
-    //destroyGameOver();
-    //destroyYouWin();
+    destroyGameOver();
+    destroyYouWin();
     destroyRulesScreen();
 
     splashMain = buildDom(`
@@ -34,6 +30,7 @@ function main() {
           <h1>Midnight Hunter</h1>
           <button class="start-button button">Start game</button>
           <button class="rules button">Rules</button>
+          <img class="start-heart" src="images/heart.png"/>
         </section>
       </main>
     `);
@@ -55,7 +52,7 @@ function main() {
     destroySplash();
 
     rulesMain = buildDom(`
-      <main class="container rules-screen">
+      <main class="rules-screen container">
         <div class="description">
           <div class="button-esc">
             <button class="esc">x</button>
@@ -111,22 +108,73 @@ function main() {
 
   function buildGame() {
     destroySplash();
-    //destroyGameOver();
     
     game = new Game();
-    game.start(); 
-    game.onOver(function() {
-      gameOverTransition();
-    });
+    if (game.gameIsOver) {
+      game.onOver(buildGameOver);
+    } else if (game.youWonGame) {
+      game.onOver(buildYouWin);
+    }
+    game.start();
+    
   }
 
   function destroyGame() {
     game.destroy();
   }
 
-  //buildGameOver()
+  /* ---- Game Over ---- */
 
-  //destroyGameOver()
+  function buildGameOver() {
+    destroyGame();
+
+    gameOverMain = buildDom(`
+      <main>
+        <div class="game-over container">
+          <h1>Game over</h1>
+          <p>Oh noooo, love don't come easy! I told you to stay away from toxic people or they can ruin your life. Better luck next time.</p>
+          <button class="restart-button button">Play Again</button>
+        </div>
+      </main>
+    `);
+    document.body.appendChild(gameOverMain);
+
+    var button = gameOverMain.querySelector('button');
+    button.addEventListener('click', buildSplash);
+  }
+
+  function destroyGameOver() {
+    if(gameOverMain) {
+      gameOverMain.remove();
+    }
+  }
+
+  /* --- You Win ---- */
+
+  function buildYouWin() {
+    destroyGame();
+
+    youWinMain = buildDom(`
+      <main>
+        <div class="you-win container">
+          <h1>You win</h1>
+          <p>Congratulations! You found true love at midnight. Make it last.</p>
+          <button class="restart-button button">Play Again</button>
+        </div>
+      </main>
+    `);
+    document.body.appendChild(youWinMain);
+
+    var button = youWinMain.querySelector('button');
+    button.addEventListener('click', buildSplash);
+
+  }
+
+  function destroyYouWin() {
+    if(youWinMain) {
+      youWinMain.remove();
+    }
+  }
 
   buildSplash();
 

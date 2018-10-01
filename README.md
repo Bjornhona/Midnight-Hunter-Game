@@ -26,7 +26,8 @@ Add walls
 
 ### game.js
 
-´´´javascript
+```javascript
+
 Game() {
   self.gameIsOver
   self.lives
@@ -48,19 +49,23 @@ Game.prototype.start(
 Game.prototype.startLoop(
   ctx
   loop() {
-    //create enemies now and then
+    //create friends & enemies now and then
+    friends = new Friend()
     enemies = new Enemy()
     
     //update positions
     self.player.update()
+    self.player.update()
     self.enemies.update()
     
-    //check if player collided with enemies and if true remove
+    //check if player collided with friends or enemies and if true remove
     self.checkIfEnemiesCollidedPlayer()
-    
-    //loose point
+    self.checkIfFriendsCollidedPlayer()
+
+    //loose life
     
     //forget enemies outside the screen
+    self.friends.filter(isInScreen())
     self.enemies.filter(isInScreen())
     
     //erase canvas
@@ -68,16 +73,17 @@ Game.prototype.startLoop(
     
     //draw
     self.player.draw()
+    self.friends.draw()
     self.enemies.draw()
     Frame(loop)
    }
    Frame(loop)
 )
-´´´
+```
 
 ### player.js
 
-´´´javascript
+```javascript
 Player(canvas, lives) {
   self.x
   self.y
@@ -94,11 +100,11 @@ Player.prototype.collidesWithEnemies()
 Player.prototype.collided()
 Player.prototype.update()
 Player.prototype.draw()
-´´´
+```
 
 ### friendemy.js
 
-´´´javascript
+```javascript
 friendemy(canvas, x, y, speed) {
   self.x
   self.y
@@ -113,13 +119,13 @@ friendemy(canvas, x, y, speed) {
 friendemy.prototype.update()
 friendemy.prototype.draw()
 friendemy.prototype.isInScreen()
-´´´
+```
 
 
 ## States y States Transitions
 Definition of the different states and their transition (transition functions)
 
-´´´javascript
+```javascript
 - splashScreen()
   - destroyGameOver()
   - destroyYouWin()
@@ -144,49 +150,53 @@ Definition of the different states and their transition (transition functions)
 
 - youWin()
   - destroyGame()
-  - buildWin()
+  - buildYouWin()
   - addEventListener(click, splashScreen)
-  ´´´
+  ```
 
 
 ## Task
 Task definition in order of priority
-´´´javascript
-create files javascript
-Main - buildDom
-Main - buildSplash
-Main - addEventListener
-Main - destroySplash
-Game - buildDom
-Main - GameOver
-Main - buildGame
-Main - destroy Game
-Main - buildGameOver 
-Main - destroyGameOver RESTART
-Game - addEventListener
-Game - create player
-Player - draw
-Player - update
-Player - check if still in screen
-Player - collision
-Player - directions
-Game - loop
-Game - player and enemies position
-Game - clear
-Game - create friends
-Game - create enemies
-Friends - draw
-Friends - update
-Friends - check if still in screen
-Fiends - collision
-Enemy - draw
-Enemy - update
-Enemy - check if still in screen
-Enemy - collision
-Game - collision + remove
-Game - lives
-Game - gameOver
-´´´
+```
+* create files javascript
+* Main - buildDom
+* Main - buildSplash
+* Main - addEventListener
+* Main - destroySplash
+* Game - buildDom
+* Main - GameOver
+* Main - buildGame
+* Main - destroy Game
+* Game - TimeOut test
+* Main - buildGameOver 
+* Main - destroyGameOver RESTART
+* Main - buildYouWin
+* Main - destroyYouWin RESTART
+* Game - addEventListener
+* Game - loop
+* Game - create player
+* Player - draw
+* Player - update
+* Player - check if still in screen
+* Player - collision
+* Player - directions
+* Game - player, friends and enemies position
+* Game - clear
+* Game - create friends
+* Game - create enemies
+* Friends - draw
+* Friends - update
+* Friends - check if still in screen
+* Fiends - collision
+* Enemy - draw
+* Enemy - update
+* Enemy - check if still in screen
+* Enemy - collision
+* Game - collision + remove
+* Game - lives
+* Game - loves
+* Game - gameOver
+```
 
 
 ## Links

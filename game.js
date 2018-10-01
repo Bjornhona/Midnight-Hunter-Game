@@ -5,6 +5,7 @@ function Game() {
     var self = this;
 
     self.gameIsOver = false;
+    self.youWonGame = false;
     self.isPause = false;
     self.intervalId = 0;
     self.rateEnemies;
@@ -12,7 +13,8 @@ function Game() {
     self.speedFriends;
     self.speedEnemies;
     self.speedLives;
-    self.message = '';
+    self.numOfFriends = 3;
+    self.numOfEnemies = 2;
 }
 
 Game.prototype.start = function () {
@@ -20,20 +22,16 @@ Game.prototype.start = function () {
 
   self.gameMain = buildDom(`
     <main class="game">
-      <header>
+      <header class="game-header">
         <div class="lives">
-          <span class="label">Lives :</span>
-          <span class="value"></span>
+          <h3>Lives</h3>
+          <div class='lives-images'>
+            <span class="one-life">♥</span>
+            <span class="two-lives">♥</span>
+            <span class="three-lives">♥</span>
+          </div>
         </div>
-        <div class='lives-images'>
-          <img class="one-full-life" src="/images/lives1.jpg"/>
-          <img class="two-full-lives" src="/images/lives2.jpg"/>
-          <img class="three-full-lives" src="/images/lives3.jpg"/>
-          <img class="one-life-gone hidden" src="/images/lives3.jpg"/>
-          <img class="two-lives-gone hidden" src="/images/lives3.jpg"/>
-          <img class="one-lives-gone hidden" src="/images/lives3.jpg"/>
-        </div>
-        <a href="#"><img src="/images/pause.png"/></a>
+        <button class="pause esc">||</button>
       </header>
       <div class="canvas">
         <canvas></canvas>
@@ -44,14 +42,25 @@ Game.prototype.start = function () {
 
   document.body.appendChild(self.gameMain);
 
+  function timeOutTest() {
+    let timerId = window.setTimeout(function() {
+      self.onGameOverCallback();
+    }, 2000);
+  }
+
+  // timeOutTest();
+
   self.canvasParentElement = self.gameMain.querySelector('.canvas');
   self.canvasElement = self.canvasParentElement.querySelector('canvas');
-  self.livesElement = self.gameMain.querySelector('.lives .value');
+  //self.livesElement = self.gameMain.querySelector('.lives');
+  self.oneLifeElement = self.gameMain.querySelector('.one-life');
+  self.twoLivesElement = self.gameMain.querySelector('.two-lives');
+  self.twoLivesElement = self.gameMain.querySelector('.three-lives');
   self.audioElement = self.gameMain.querySelector('.soundtrack');
-  self.audioElement.src = './music/diva.mp3';
+  self.audioElement.src = 'sounds/John_Paul_Young_-_Love_Is_In_The_Air_1978[ListenVid.com].mp3';
 
-  self.friendsSound = new Audio("./music/collision-friends.mp3");
-  self.enemiesSound = new Audio("./music/collision-enemies.mp3");
+  self.friendsSound = new Audio("sounds/kiss-sound.mp3");
+  self.enemiesSound = new Audio("sounds/Wilhelm-Scream.mp3");
   
   self.width = self.canvasParentElement.offsetWidth;
   self.height = self.canvasParentElement.offsetHeight;
@@ -59,44 +68,194 @@ Game.prototype.start = function () {
   self.canvasElement.setAttribute('width', self.width);
   self.canvasElement.setAttribute('height', self.height);
 
-  self.player = new Player(self.canvasElement, 5, self.characterScreen.img);
+  self.player = new Player(self.canvasElement, 3, 3);
 
   self.handleKeyDown = function(event) {
       if (event.key === 'ArrowLeft' || event.target.classList.contains('left')) {
-        self.player.setDirection(-1);
+        self.player.setDirection(-1, 0);
       } else if (event.key === 'ArrowRight' || event.target.classList.contains('right')) {
-        self.player.setDirection(1);
+        self.player.setDirection(1, 0);
+      } else if (event.key === 'ArrowUp' || event.target.classList.contains('up')) {
+        self.player.setDirection(0, -1);
+      } else if (event.key === 'ArrowDown' || event.target.classList.contains('down')) {
+        self.player.setDirection(0, 1);
       }
   }
 
-  self.upTouchButton = self.gameMain.querySelector('.up');
-  self.leftTouchButton = self.gameMain.querySelector('.left');
-  self.rightTouchButton = self.gameMain.querySelector('.right');
-  self.downTouchButton = self.gameMain.querySelector('.down');  
-  self.leftTouchButton.addEventListener('click', self.handleKeyDown);
-  self.rightTouchButton.addEventListener('click', self.handleKeyDown);
+  document.body.addEventListener('keydown', self.handleKeyDown);
 
-  document.body.addEventListener('keydown', self.handleKeyDown)
-
-  self.starLoop();
+  self.startLoop();
 
   self.enemies = [];
-  self.points = [];
-  self.lives = [];
+  self.friends = [];
 
-  function roundTime () {
-      self.level++;
-      self.message = new Message (self.canvasElement, 'Level ' + self.level);
-      
+};
 
-      setTimeout(function() {
-          self.message = null;
-      }, 2000)
+Game.prototype._spawnEnemy = function ()  {
+  var self = this;
 
-      if (self.level >= 5) {
-          clearInterval(self.intervalId);
-      }
-      
+  while (self.enemies.length < self.numOfEnemies) {
+    if (Math.random() > 0.999) {
+      var randomY = Math.random() * self.height * 0.99;
+      self.enemies.push(new Frienemy(self.canvasElement, self.width, randomY, 'Enemy'));
+    }
   }
-  self.intervalId = setInterval(roundTime, 15000);
+};
+
+Game.prototype._spawnFriend = function ()  {
+  var self = this;
+
+  while (self.friends.length < self.numOfFriends) {
+    if (Math.random() > 0.999) {
+      var randomY = Math.random() * self.height * 0.99;
+      self.friends.push(new Frienemy(self.canvasElement, self.width, randomY, 'Friend'));
+    }
+  }
+};
+
+Game.prototype.startLoop = function () {
+  var self = this;
+
+  self.ctx = self.canvasElement.getContext('2d');
+  var pauseButton = document.querySelector('.pause');
+  
+  // document.body.addEventListener('keyup', function(event) {
+  //   if(event.key === ' ') {
+  //     self.isPause = !self.isPause;
+  //     if(!self.isPause) {
+  //       loop();
+  //       self.audioElement.play();
+  //     }
+  //   }
+  // });
+  pauseButton.addEventListener('click', function() {
+    self.isPause = !self.isPause;
+    if(!self.isPause) {
+      loop();
+      self.audioElement.play();
+    }
+  });
+
+  self.audioElement.play();
+
+  function loop () {
+      
+    //self.checkRound();
+
+    //update positions
+    self.player.update();
+
+    self._spawnEnemy();
+    self._spawnFriend();
+
+    self.friends.forEach(function(item) {
+      item.update();
+    });
+
+    self.enemies.forEach(function(item) {
+      item.update();
+    });
+
+    //check positions
+    self.friends.forEach(function(item) {
+      item.isInScreen();
+    });
+    
+    self.enemies.forEach(function(item) {
+      item.isInScreen();
+    });
+    
+    // check if player collide with enemy of friend
+    self.checkIfFriendsCollidedPlayer();
+    self.checkIfEnemiesCollidedPlayer();
+
+    // check if game over
+    self.checkIfGameOver();
+ 
+
+    //erase canvas
+    self.ctx.clearRect(0, 0, self.width, self.height);
+
+    //draw
+    self.player.draw();
+
+    self.friends.forEach(function(item) {
+        item.draw();
+    });
+
+    self.enemies.forEach(function(item) {
+      item.draw();
+    });
+
+    // if game is not over
+    if(!self.gameIsOver && !self.youWonGame && !self.isPause) {
+        window.requestAnimationFrame(loop);
+      } else {
+        self.audioElement.pause();
+      }
+  }
+
+  window.requestAnimationFrame(loop);
+};
+
+Game.prototype.checkIfEnemiesCollidedPlayer = function() {
+  var self = this;
+
+  self.enemies.forEach(function (item, index) {
+    if (self.player.collidesWithEnemy(item)) {
+      self.player.collidedEnemy();
+      self.enemies.splice(index,1);
+      self.enemiesSound.play();
+      self.enemiesSound.volume = 0.7;
+    }
+  });
+};
+
+Game.prototype.checkIfFriendsCollidedPlayer = function () {
+  var self = this;
+
+  self.friends.forEach(function (item, index) {
+    if (self.player.collidesWithFriend(item)) {
+      self.player.collidedFriend();
+      self.friends.splice(index, 1);
+      self.friendsSound.play();
+      self.friendsSound.volume = 0.7;
+    }
+  });
+};
+
+Game.prototype.checkIfGameOver = function () {
+  var self = this;
+
+  if (!self.player.lives) {
+    self.gameOver();
+  } else if (!self.player.loves) {
+    self.youWon();
+  }
+}
+
+Game.prototype.onOver = function (callback) {
+  var self = this;
+
+  self.onGameOverCallback = callback;
+};
+
+Game.prototype.gameOver = function () {
+    var self = this;
+
+    self.gameIsOver = true;
+    self.onGameOverCallback();
+};
+
+Game.prototype.youWon = function () {
+  var self = this;
+
+  self.youWonGame = true;
+  self.onGameOverCallback();
+};
+
+Game.prototype.destroy = function () {
+  var self = this;
+
+  self.gameMain.remove();
 };
