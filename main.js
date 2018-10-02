@@ -57,30 +57,30 @@ function main() {
           <div class="button-esc">
             <button class="esc">x</button>
           </div>
-          <h1>Rules</h1>
-          <div class="text">
-            <p class="game-intro">What a great opportunity to find the love of your life!</p>
-            <p>Catch lovely ladies or really handsome men to see if you find true love.</p>
-            <p>Keep out of extremely jealous ex boyfriends, ex wives etc. unless you wish to end up at the morgue.</p>
-            <p>Move around with the <strong>UP</strong>, <strong>DOWN</strong>, <strong>RIGHT</strong> and <strong>LEFT</strong> keys.</p>
-            <p>And remember, love don't come easy!!!</p> 
+          <h1>Endless love is in the air</h1>
+          <div class="text-and-rules">
+            <div class="text">
+              <p class="game-intro">Find the love of your life!</p>
+              <p>Hunt and catch your true love.</p>
+              <p>Only, love don't come easy!!!</p> 
+            </div>
+            <div class="rules">
+              <ul>
+                <li><p>You win the game when you've hit on the singles.</p></li>
+                <li><p>You lose a life each time you get caught by your crazy ex.</p></li>
+              </ul>
+            </div>
           </div>
           <div class="images">
             <div class="enemies">
-              <h2>Meet your worst enemies</h2>
-              <div class"ex-images">
+              <h2>Stay away of jealous ex boyfriends or crazy ex wives!</h2>
+              <div class="ex-images">
                 <img class="image-border" src="./images/angry-ex.jpg">
                 <img class="image-border" src="./images/scary-ex.jpg">
                 <img class="image-border" src="./images/desperate-ex.jpg">
               </div>
+              <p>Move around with <strong>UP</strong>, <strong>DOWN</strong>, <strong>RIGHT</strong> and <strong>LEFT</strong> keys.</p>
             </div>
-          </div>
-          <div class="rules">
-            <ul>
-              <li>You lose a life if you get caught by any of the jealous people out there.</li>
-              <li>You win the game when you've hit on all the lovely ladies or gentlemen in the night.</li>
-              <li>Endless love is in the air!</li>
-            </ul>
           </div>
         </div>
       </main>
@@ -104,24 +104,25 @@ function main() {
     destroySplash();
     
     game = new Game();
-    // if (game.gameIsOver) {
-    //   game.onOver(buildGameOver);
-    // } else if (game.youWonGame) {
-    //   game.onOver(buildYouWin);
-    // }
-    game.onOver(buildGameOver);
+    game.onOver(destroyGame);
     game.start();
     
   }
 
-  function destroyGame() {
+  function destroyGame(status) {
     game.destroy();
+
+    if (status === 'lose') {
+      buildGameOver();
+    } else if (status === 'win') {
+      buildYouWin();
+    }
+
   }
 
   /* ---- Game Over ---- */
 
   function buildGameOver() {
-    destroyGame();
 
     gameOverMain = buildDom(`
       <main class="game-over-screen">
@@ -151,7 +152,6 @@ function main() {
   /* --- You Win ---- */
 
   function buildYouWin() {
-    destroyGame();
 
     youWinMain = buildDom(`
       <main class="you-win-screen">
