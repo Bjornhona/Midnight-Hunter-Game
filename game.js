@@ -53,6 +53,16 @@ Game.prototype.start = function () {
       <div class="canvas">
         <canvas></canvas>
       </div>
+      <div class="mobile">
+        <div class="up-and-down">
+          <img class="button-up hidden arrows" src="images/up-arrow.png"/>
+          <img class="button-down hidden arrows" src="images/down-arrow.png"/>
+        </div>
+        <div class="left-and-right">
+          <img class="button-left hidden arrows" src="images/left-arrow.png"/>
+          <img class="button-right hidden arrows" src="images/right-arrow.png"/>
+        </div>
+      </div>
       <audio class="soundtrack"><source type="audio/mpeg" /></audio>     
     </main>
   `);
@@ -83,6 +93,11 @@ Game.prototype.start = function () {
 
   self.player = new Player(self.canvasElement, 5, 5);
 
+  self.mobileArrowUp = document.querySelector('.button-up');
+  self.mobileArrowDown = document.querySelector('.button-down');
+  self.mobileArrowLeft = document.querySelector('.button-left');
+  self.mobileArrowRight = document.querySelector('.button-right');
+
   self.handleKeyDown = function(event) {
       if (event.key === 'ArrowLeft' || event.target.classList.contains('left')) {
         self.player.setDirection(-1, 0);
@@ -97,10 +112,33 @@ Game.prototype.start = function () {
 
   document.body.addEventListener('keydown', self.handleKeyDown);
 
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+    self.mobileArrowUp.classList.remove('hidden');
+    self.mobileArrowDown.classList.remove('hidden');
+    self.mobileArrowLeft.classList.remove('hidden');
+    self.mobileArrowRight.classList.remove('hidden');
+  
+    self.mobileArrowUp.addEventListener('touchstart', function() {
+      self.player.setDirection(0, -1);
+    });
+    self.mobileArrowDown.addEventListener('touchstart', function() {
+      self.player.setDirection(0, 1);
+    });
+    self.mobileArrowLeft.addEventListener('touchstart', function() {
+      self.player.setDirection(-1, 0);
+    });
+    self.mobileArrowRight.addEventListener('touchstart', function() {
+      self.player.setDirection(1, 0);
+    });
+  }
+  
+
   self.startLoop();
 
   self.enemies = [];
   self.friends = [];
+  self.walls = [];
 
 };
 
@@ -126,10 +164,29 @@ Game.prototype._spawnFriend = function ()  {
   }
 };
 
+Game.prototype._spawnWall = function ()  {
+  var self = this;
+  //if mobile
+  // mobileWalls
+  //else
+  // desktopWalls
+
+  // var randomY = Math.random() * self.height * 0.99;
+  // var randomY = Math.random() * self.height * 0.99;
+  // self.walls.push(new Wall(self.canvasElement, randomX, randomY, 'horizontal', 100));
+  //self.walls.push(new Wall(self.canvasElement, self.width/2+150/4, 400, 'horizontal', 150));
+  self.walls.push(new Wall(self.canvasElement, self.width/3, self.height/ 2, 'vertical', 150));
+  // self.walls.push(new Wall(self.canvasElement, self.width/3*2, 200, 'vertical', 150));
+  // self.walls.push(new Wall(self.canvasElement, self.width/4, 400, 'square', 150));
+  // self.walls.push(new Wall(self.canvasElement, self.width/4*3, 400, 'square', 150));
+  
+};
+
 Game.prototype.startLoop = function () {
   var self = this;
 
   self.ctx = self.canvasElement.getContext('2d');
+
   var pauseButton = document.querySelector('button.pause');
   var playButton = document.querySelector('button.pause-play');
   
@@ -157,50 +214,9 @@ Game.prototype.startLoop = function () {
 
   function loop () {
 
-    //update positions
-    self.player.update();
-
-    self._spawnEnemy();
-    self._spawnFriend();
-
-    self.friends.forEach(function(item) {
-      item.update();
-    });
-
-    self.enemies.forEach(function(item) {
-      item.update();
-    });
-
-    //check positions
-    self.friends.forEach(function(item) {
-      item.isInScreen();
-    });
-    
-    self.enemies.forEach(function(item) {
-      item.isInScreen();
-    });
-    
-    // check if player collide with enemy of friend
-    self.checkIfFriendsCollidedPlayer();
-    self.checkIfEnemiesCollidedPlayer();
-
-    // check if game over
-    self.checkIfGameOver();
- 
-
-    //erase canvas
-    self.ctx.clearRect(0, 0, self.width, self.height);
-
-    //draw
-    self.player.draw();
-
-    self.friends.forEach(function(item) {
-        item.draw();
-    });
-
-    self.enemies.forEach(function(item) {
-      item.draw();
-    });
+    self._clearAll();
+    self._updateAll();
+    self._drawAll();
 
     // if game is not over
     if(!self.gameIsOver && !self.youWonGame && !self.isPause) {
@@ -212,6 +228,65 @@ Game.prototype.startLoop = function () {
 
   window.requestAnimationFrame(loop);
 };
+
+Game.prototype._drawAll = function () {
+  var self = this;
+
+  //draw
+  self.player.draw();
+
+  self.friends.forEach(function(item) {
+      item.draw();
+  });
+
+  self.enemies.forEach(function(item) {
+    item.draw();
+  });
+
+  self.walls.forEach(function (item) {
+    item.draw();
+  });
+}
+
+Game.prototype._clearAll = function () {
+  var self = this;
+   //erase canvas
+   self.ctx.clearRect(0, 0, self.width, self.height);
+}
+
+Game.prototype._updateAll = function () {
+  var self = this; 
+  //update positions
+  self.player.update();
+
+  self._spawnEnemy();
+  self._spawnFriend();
+  self._spawnWall();
+
+  self.friends.forEach(function(item) {
+    item.update();
+  });
+
+  self.enemies.forEach(function(item) {
+    item.update();
+  });
+
+  //check positions
+  self.friends.forEach(function(item) {
+    item.isInScreen();
+  });
+
+  self.enemies.forEach(function(item) {
+    item.isInScreen();
+  });
+
+  // check if player collide with enemy of friend
+  self.checkIfFriendsCollidedPlayer();
+  self.checkIfEnemiesCollidedPlayer();
+
+  // check if game over
+  self.checkIfGameOver();
+}
 
 Game.prototype.checkIfEnemiesCollidedPlayer = function() {
   var self = this;
@@ -274,6 +349,12 @@ Game.prototype.checkIfFriendsCollidedPlayer = function () {
     }
   });
 };
+
+Game.prototype.checkIfWallsCollidedPlayer
+
+Game.checkIfWallCollidedFriends
+
+Game.chekIfWallCollidedEnemies
 
 Game.prototype.checkIfGameOver = function () {
   var self = this;

@@ -10,7 +10,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: lightblue;
+  background-color: #add8e6;
   font-family: 'Quicksand', sans-serif;
 }
 
@@ -60,6 +60,10 @@ button.button {
   width: 250px;
 }
 
+button.button:hover {
+  background-color: rgb(252, 173, 216);
+}
+
 button.esc {
   background-color: pink;
   padding: 7px 10px;
@@ -69,6 +73,10 @@ button.esc {
   font-weight: 800;
   text-transform: uppercase;
   width: 50px;
+}
+
+button.esc:hover {
+  background-color: rgb(252, 173, 216);
 }
 
 div.button-esc {
@@ -207,7 +215,7 @@ div.loves {
   align-items: center;
 }
 
-@media (min-width: 768px) {
+@media only screen and (min-width: 768px) {
 
   header.game-header {
     display: flex;
@@ -226,7 +234,7 @@ div.loves {
 
 }
 
-@media (max-width: 768px) {
+@media only screen and (max-width: 768px) {
 
   header.game-header {
     display: flex;
@@ -262,7 +270,6 @@ div.loves {
   div.loves-images {
     margin: 5px 0;
   }
-
 }
 
 /* ---- Game Over ---- */
@@ -308,4 +315,31 @@ div.you-win {
 img.love-doves {
   width: 250px;
   margin-top: 40px;
+}
+
+/* ---- mobile ---- */
+
+.mobile {
+  display: flex;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.up-and-down {
+  display: flex;
+  flex-direction: column;
+}
+
+.left-and-right {
+  display: flex;
+  align-self: flex-end;
+}
+
+.arrows {
+  width: 70px;
+  height: 70px;
+  margin: 3px;
 }
