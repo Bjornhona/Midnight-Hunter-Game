@@ -82,7 +82,7 @@ Game.prototype.start = function () {
   self.audioElement = self.gameMain.querySelector('.soundtrack');
   self.audioElement.src = 'sounds/John_Paul_Young_-_Love_Is_In_The_Air_1978[ListenVid.com].mp3';
 
-  self.friendsSound = new Audio("./sounds/kiss-sound.mp3");
+  self.friendsSound = new Audio("./sounds/Kiss-sound.mp3");
   self.enemiesSound = new Audio("./sounds/Wilhelm-Scream.mp3");
   
   self.width = self.canvasParentElement.offsetWidth;
@@ -114,6 +114,9 @@ Game.prototype.start = function () {
 
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
+    self.numOfFriends = 1;
+    self.numOfEnemies = 1;
+
     self.mobileArrowUp.classList.remove('hidden');
     self.mobileArrowDown.classList.remove('hidden');
     self.mobileArrowLeft.classList.remove('hidden');
@@ -139,6 +142,7 @@ Game.prototype.start = function () {
   self.enemies = [];
   self.friends = [];
   self.walls = [];
+  self._spawnWall();
 
 };
 
@@ -166,25 +170,23 @@ Game.prototype._spawnFriend = function ()  {
 
 Game.prototype._spawnWall = function ()  {
   var self = this;
-  //if mobile
-  // mobileWalls
-  //else
-  // desktopWalls
 
-  // var randomY = Math.random() * self.height * 0.99;
-  // var randomY = Math.random() * self.height * 0.99;
-  // self.walls.push(new Wall(self.canvasElement, randomX, randomY, 'horizontal', 100));
-  //self.walls.push(new Wall(self.canvasElement, self.width/2+150/4, 400, 'horizontal', 150));
-  self.walls.push(new Wall(self.canvasElement, self.width/3, self.height/ 2, 'vertical', 150));
-  // self.walls.push(new Wall(self.canvasElement, self.width/3*2, 200, 'vertical', 150));
-  // self.walls.push(new Wall(self.canvasElement, self.width/4, 400, 'square', 150));
-  // self.walls.push(new Wall(self.canvasElement, self.width/4*3, 400, 'square', 150));
-  
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    self.walls.push(new Wall(self.canvasElement, self.width/3, self.height/3, 'vertical'));
+    self.walls.push(new Wall(self.canvasElement, self.width/5*2, self.height/3*2, 'horizontal'));
+
+
+  } else {
+    self.walls.push(new Wall(self.canvasElement, self.width/2, self.height/2, 'vertical'));
+    self.walls.push(new Wall(self.canvasElement, self.width/12*3, self.height/12*3, 'horizontal'));
+    self.walls.push(new Wall(self.canvasElement, self.width/12*3, self.height/3*2, 'square'));
+    self.walls.push(new Wall(self.canvasElement, self.width/12*9, self.height/12*3, 'square'));
+    self.walls.push(new Wall(self.canvasElement, self.width/12*10, self.height/12*10, 'horizontal'));
+  }
 };
 
 Game.prototype.startLoop = function () {
   var self = this;
-
   self.ctx = self.canvasElement.getContext('2d');
 
   var pauseButton = document.querySelector('button.pause');
@@ -261,7 +263,7 @@ Game.prototype._updateAll = function () {
 
   self._spawnEnemy();
   self._spawnFriend();
-  self._spawnWall();
+  
 
   self.friends.forEach(function(item) {
     item.update();
@@ -280,9 +282,12 @@ Game.prototype._updateAll = function () {
     item.isInScreen();
   });
 
-  // check if player collide with enemy of friend
+  // check if player collide with friends, enemies or walls
   self.checkIfFriendsCollidedPlayer();
   self.checkIfEnemiesCollidedPlayer();
+  self.checkIfWallsCollidedPlayer();
+  self.checkIfWallsCollidedFriends();
+  self.checkIfWallsCollidedEnemies();
 
   // check if game over
   self.checkIfGameOver();
@@ -350,11 +355,41 @@ Game.prototype.checkIfFriendsCollidedPlayer = function () {
   });
 };
 
-Game.prototype.checkIfWallsCollidedPlayer
+Game.prototype.checkIfWallsCollidedPlayer = function () {
+  var self = this;
 
-Game.checkIfWallCollidedFriends
+  self.walls.forEach(function (item) {
+    if(self.player.collidesWithWall(item)) {
+      self.player.invertDirection();
+    }
+  });
+}
 
-Game.chekIfWallCollidedEnemies
+Game.prototype.checkIfWallsCollidedFriends = function () {
+  var self = this;
+
+  self.walls.forEach(function (wallItem) {
+    self.friends.forEach(function (friendItem) {
+      if(friendItem.collidesWithWall(wallItem)) {
+        friendItem.invertDirection();
+      }
+    });
+  });
+}
+
+Game.prototype.checkIfWallsCollidedEnemies = function () {
+  var self = this;
+
+  self.walls.forEach(function (wallItem) {
+    self.enemies.forEach(function (enemyItem) {
+      if(enemyItem.collidesWithWall(wallItem)) {
+        enemyItem.invertDirection();
+      }
+    });
+  });
+}
+
+// Game.checkIfWallCollidedFrienemies
 
 Game.prototype.checkIfGameOver = function () {
   var self = this;

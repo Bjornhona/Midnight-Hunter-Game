@@ -56,6 +56,28 @@ Player.prototype.collidesWithEnemy = function (enemy) {
     return false;
 };
 
+Player.prototype.collidesWithWall = function (wall) {
+    var self = this;
+
+    const collidesRight = self.x + self.size / 2 > wall.x - wall.width / 2;
+    const collidesLeft = self.x - self.size / 2 < wall.x + wall.width / 2;
+    const collidesTop = self.y - self.size / 2 < wall.y + wall.height / 2;
+    const collidesBottom = self.y + self.size / 2 > wall.y - wall.height / 2;
+
+    if (collidesLeft && collidesRight && collidesTop && collidesBottom) {
+        return true;
+    }
+    
+    return false;
+}
+
+Player.prototype.invertDirection = function () {
+    var self = this;
+
+    self.dx = self.dx * -1;
+    self.dy = self.dy * -1;
+}
+
 Player.prototype.collidedFriend = function () {
   var self = this;
   
@@ -80,26 +102,23 @@ Player.prototype.update = function() {
 Player.prototype.checkLimits = function() {
 var self = this;
 
-  if (self.x < 0) {
-    self.dx = 1;
-  }
-
-  if (self.x > self.canvasElement.width) {
-      self.dx = -1;
-  }
-
-  if (self.y < 0) {
-    self.dy = 1;
-  }
-
-  if (self.y > self.canvasElement.height) {
-      self.dy = -1;
-  }
+    // checks outer walls
+    if (self.x < 0) {
+        self.dx = 1;
+    }
+    if (self.x > self.canvasElement.width) {
+        self.dx = -1;
+    }
+    if (self.y < 0) {
+        self.dy = 1;
+    }
+    if (self.y > self.canvasElement.height) {
+        self.dy = -1;
+    }
 }
 
 Player.prototype.draw = function() {
     var self = this;
-
     
     // center the center
     self.xPosition = self.x - (self.size/2);
