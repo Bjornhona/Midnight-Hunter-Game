@@ -173,7 +173,7 @@ Game.prototype._spawnWall = function ()  {
 
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
     self.walls.push(new Wall(self.canvasElement, self.width/3, self.height/3, 'vertical'));
-    self.walls.push(new Wall(self.canvasElement, self.width/5*2, self.height/3*2, 'horizontal'));
+    self.walls.push(new Wall(self.canvasElement, self.width/12*6, self.height/12*9, 'horizontal'));
 
 
   } else {
