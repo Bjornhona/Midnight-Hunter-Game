@@ -82,8 +82,8 @@ Game.prototype.start = function () {
   self.audioElement = self.gameMain.querySelector('.soundtrack');
   self.audioElement.src = 'sounds/John_Paul_Young_-_Love_Is_In_The_Air_1978[ListenVid.com].mp3';
 
-  self.friendsSound = new Audio("sounds/kiss-sound.mp3");
-  self.enemiesSound = new Audio("sounds/Wilhelm-Scream.mp3");
+  self.friendsSound = new Audio("./sounds/kiss-sound.mp3");
+  self.enemiesSound = new Audio("./sounds/Wilhelm-Scream.mp3");
   
   self.width = self.canvasParentElement.offsetWidth;
   self.height = self.canvasParentElement.offsetHeight;
