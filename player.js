@@ -8,7 +8,7 @@ function Player (canvas, loves, lives) {
     self.y = self.canvasElement.height - 30;
     self.dx = 0;
     self.dy = 0;
-    self.size = 70;
+    self.size = 50;
     self.speed = 5;
     self.loves = loves;
     self.lives = lives;

@@ -13,8 +13,8 @@ function Game() {
     self.speedFriends;
     self.speedEnemies;
     self.speedLives;
-    self.numOfFriends = 3;
-    self.numOfEnemies = 2;
+    self.numOfFriends = 1;
+    self.numOfEnemies = 4;
 }
 
 Game.prototype.start = function () {
@@ -151,8 +151,8 @@ Game.prototype._spawnEnemy = function ()  {
 
   while (self.enemies.length < self.numOfEnemies) {
     if (Math.random() > 0.999) {
-      var randomY = Math.random() * self.height * 0.99;
-      self.enemies.push(new Frienemy(self.canvasElement, self.width, randomY, 'Enemy'));
+      var randomX = Math.random() * self.width * 0.99;
+      self.enemies.push(new Frienemy(self.canvasElement, randomX, 0, 'Enemy'));
     }
   }
 };
@@ -162,8 +162,8 @@ Game.prototype._spawnFriend = function ()  {
 
   while (self.friends.length < self.numOfFriends) {
     if (Math.random() > 0.999) {
-      var randomY = Math.random() * self.height * 0.99;
-      self.friends.push(new Frienemy(self.canvasElement, self.width, randomY, 'Friend'));
+      var randomX = Math.random() * self.width * 0.99;
+      self.friends.push(new Frienemy(self.canvasElement, randomX, 0, 'Friend'));
     }
   }
 };
@@ -180,8 +180,8 @@ Game.prototype._spawnWall = function ()  {
     self.walls.push(new Wall(self.canvasElement, self.width/2, self.height/2, 'vertical'));
     self.walls.push(new Wall(self.canvasElement, self.width/12*3, self.height/12*3, 'horizontal'));
     self.walls.push(new Wall(self.canvasElement, self.width/12*3, self.height/3*2, 'square'));
-    self.walls.push(new Wall(self.canvasElement, self.width/12*9, self.height/12*3, 'square'));
-    self.walls.push(new Wall(self.canvasElement, self.width/12*10, self.height/12*10, 'horizontal'));
+    self.walls.push(new Wall(self.canvasElement, self.width/12*9, self.height/12*4, 'square'));
+    self.walls.push(new Wall(self.canvasElement, self.width/12*9, self.height/12*9, 'horizontal'));
   }
 };
 
