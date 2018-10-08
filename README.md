@@ -2,11 +2,11 @@
 "Midnight Hunter"
 
 ## Description
-A simple game in Javascript. In a desperate attempt to find the love of his life, the women hunter tries to find girls in the dark while trying to avoid devastating ex boyfriend enemies. He starts with three lives, but loses a life each time he is caught by ex boyfriend enemies. The new level condition is when the hunter has confronted all girls available in the night. The hunter gains full lives for each level as he quickly recovers after a big kiss. The game adds more girls and ex boyfriends for each level. Losing condition, no more lives. If all levels are acomplished, the hunter has finally found true love and therefore wins.
+A simple game in Javascript based on Canvas. In a desperate attempt to find the love of his life, the hunter tries to find available girls in the dark while trying to avoid devastating ex boyfriend enemies. He starts with five lives, but then loses one life each time he is caught by an enemy. The You Win condition is when the hunter has confronted all girls available in the night. The hunter gains full lives for each level as he quickly recovers after a big kiss. The Game Over condition, no more lives. If all levels are acomplished, the hunter has finally found true love and therefore wins.
 
 
 ## MVP (DOM - CANVAS) // To do
-CANVAS game. MVP definition: A player moves around in a room. There will be a treasure appearing on the oppisite side of the canvas. The treasure is first static, then moves around.
+CANVAS game. MVP definition: A player moves around in a room with a few blocking walls. There will be kissable friends appearing on the oppisite side of the canvas. The friend is first created in static state, then the motions will be defined. The "frienemy" will be created, first in static state, then with motions defined. The frienemies will then be separated into "friends" and "enemies" and will be given different conditions. Also outer and inner Walls will be blocking the way of both runner, friends and enemies. Their collision with the walls will change their direcctions.
 
 
 ## Backlog // Challenge
@@ -63,10 +63,6 @@ Game.prototype.startLoop(
     self.checkIfFriendsCollidedPlayer()
 
     //loose life
-    
-    //forget enemies outside the screen
-    self.friends.filter(isInScreen())
-    self.enemies.filter(isInScreen())
     
     //erase canvas
     ctx.clearRect()
